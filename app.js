@@ -1,4 +1,4 @@
-var hours = ['6am: ','7am: ','8am: ','9am: ','10am: ','11am: ','12pm: ','1pm: ','2pm: ','3pm: ','4pm: ','5pm: ','6pm: ','7pm: '];
+var hours = ['6am: ','7am: ','8am: ','9am: ','10am: ','11am: ','12pm: ','1pm: ','2pm: ','3pm: ','4pm: ','5pm: ','6pm: ','7pm: ','Total: '];
 
 var Seattle = {
     name : 'Seattle',
@@ -66,10 +66,13 @@ var Lima = {
     }
 }
 function getSalesData(location) {
-    for (var i = 0; i < hours.length; i++) {
+    var total = 0;
+    for (var i = 0; i < hours.length - 1; i++) {
         var numCookies = Math.ceil(location.getSales() * location.averageCustomers)
         location.sales[i] = hours[i] + numCookies + ' cookies';
+        total += numCookies
     }
+    location.sales[location.sales.length -1] = 'Total: ' + total;
 }
 function displayData(location) {
     var salesData = location.sales;
@@ -77,11 +80,13 @@ function displayData(location) {
     var ul = document.createElement('ul');
     getDiv.appendChild(ul);
     ul.textContent = location.name;
-    for (var i = 0; i < salesData.length; i++) {
+    for (var i = 0; i < salesData.length - 1; i++) {
         var li = document.createElement('li');
-        var listItem = ul.appendChild(li);
+        ul.appendChild(li);
         li.textContent = location.sales[i];
     }
+    ul.appendChild(li);
+    li.textContent = location.sales[location.sales.length -1] + ' cookies';
 }
 getSalesData(Seattle);
 getSalesData(Tokyo)
