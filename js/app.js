@@ -11,25 +11,26 @@ function createHeaderRow() {
 }
 // standalone function to create table footer
 function createFooterRow() {
-    addElement('td', grabContainer, 'Total');
+    var footerRow = addElement('tr', grabContainer)
+    addElement('th', footerRow, 'Total');
     for (i = 0; i < hours.length - 1; i++) {
-        addElement('td', grabContainer, getTotalsForFooter(i));
+        addElement('td', footerRow, getTotalsForFooter(i));
     }
-    addElement('td', grabContainer, getGrandTotal());
+    addElement('td', footerRow, getGrandTotal());
 }
 // get totals for footer
 function getTotalsForFooter(hour) {
     var totalForHour = 0;
     for (var i = 0; i < stores.length; i++) {
-        totalForHour = totalForHour + stores[i].sales[hour];
+        totalForHour += stores[i].sales[hour];
     }
     return totalForHour;
 }
-// get grand total
+// get grand total (total of totals)
 function getGrandTotal() {
     var grandTotal = 0;
     for (var i = 0; i < stores.length; i++) {
-        grandTotal = grandTotal + stores[i].totalSales;
+        grandTotal += stores[i].totalSales;
     }
     return grandTotal;
 }
@@ -45,7 +46,7 @@ function addElement(tag, container, text) {
 function randomInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
+// Constructor function
 function Store(storeName, minCustomers, maxCustomers, averageCustomers) {
     this.storeName = storeName;
     this.minCustomers = minCustomers;
@@ -55,6 +56,7 @@ function Store(storeName, minCustomers, maxCustomers, averageCustomers) {
     this.totalSales = this.getTotalSales();
     this.render = this.render();
 }
+// method that loops through the store hours and returns an array with random cookie sales for each hour
 Store.prototype.getSalesData = function () {
     var salesArr = [];
     for (var i = 0; i < hours.length -1; i++) {
@@ -62,18 +64,20 @@ Store.prototype.getSalesData = function () {
     }
     return salesArr;
 }
+// renders the sales data into a row
 Store.prototype.render = function () {
     var newRow = addElement('tr', grabContainer,);
-    addElement('td', newRow, this.storeName);
+    addElement('th', newRow, this.storeName);
     for (i = 0; i < this.sales.length; i++) {
         addElement('td', newRow, this.sales[i]);
     }
     addElement('td', newRow, this.totalSales);
 }
+// gets the total sales for day for each store
 Store.prototype.getTotalSales = function () {
     var totalSales = 0;
     for (i = 0; i < this.sales.length; i++) {
-        totalSales = totalSales + this.sales[i];
+        totalSales += this.sales[i];
     }
     return totalSales;
 }
