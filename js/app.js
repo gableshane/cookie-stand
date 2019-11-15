@@ -1,6 +1,34 @@
 var hours = ['6:00AM','7:00AM','8:00AM','9:00AM','10:00AM','11:00AM','12:00PM','1:00PM','2:00PM','3:00PM','4:00PM','5:00PM','6:00PM','7:00PM', 'Daily Location Total'];
-var stores = [];
+var storesObjects = []
 var grabContainer = document.getElementById('container');
+
+// form stuff
+var form = document.getElementById('cookie-stand-form')
+
+form.addEventListener('submit', submitHandler)
+
+function submitHandler(event) {
+    event.preventDefault();
+    var storeName = event.target.storeCity.value;
+    var minCustomers = event.target.storeMinCustomers.value;
+    var maxCustomers = event.target.storeMaxCustomers.value;
+    var averageCustomers = event.target.storeAverageSale.value;
+    
+    storesObjects.push(new Store(storeName, minCustomers, maxCustomers, averageCustomers));
+    updateFooterRow();
+    event.target.reset();
+}
+// removing and updating footer
+function updateFooterRow () {
+    var footer = document.getElementById('footer');
+    var cells = footer.firstElementChild;
+    while (cells) {
+        footer.removeChild(cells);
+        cells = footer.firstElementChild;
+    }
+    createFooterRow();
+}
+
 // standalone function to create table header
 function createHeaderRow() {
     var headerRow = addElement('tr', grabContainer);
@@ -12,6 +40,7 @@ function createHeaderRow() {
 // standalone function to create table footer
 function createFooterRow() {
     var footerRow = addElement('tr', grabContainer)
+    footerRow.setAttribute('id','footer');
     addElement('th', footerRow, 'Total');
     for (i = 0; i < hours.length - 1; i++) {
         addElement('td', footerRow, getTotalsForFooter(i));
@@ -21,16 +50,16 @@ function createFooterRow() {
 // get totals for footer
 function getTotalsForFooter(hour) {
     var totalForHour = 0;
-    for (var i = 0; i < stores.length; i++) {
-        totalForHour += stores[i].sales[hour];
+    for (var i = 0; i < storesObjects.length; i++) {
+        totalForHour += storesObjects[i].sales[hour];
     }
     return totalForHour;
 }
 // get grand total (total of totals)
 function getGrandTotal() {
     var grandTotal = 0;
-    for (var i = 0; i < stores.length; i++) {
-        grandTotal += stores[i].totalSales;
+    for (var i = 0; i < storesObjects.length; i++) {
+        grandTotal += storesObjects[i].totalSales;
     }
     return grandTotal;
 }
@@ -84,9 +113,9 @@ Store.prototype.getTotalSales = function () {
 
 
 createHeaderRow();
-stores.push(new Store('Seattle', 23, 65, 6.3));
-stores.push(new Store('Tokyo', 3, 24, 1.2));
-stores.push(new Store('Dubai', 11, 38, 3.7));
-stores.push(new Store('Paris', 20, 38, 2.3));
-stores.push(new Store('Lima', 2, 16, 4.6));
+storesObjects.push(new Store('Seattle', 23, 65, 6.3));
+storesObjects.push(new Store('Tokyo', 3, 24, 1.2));
+storesObjects.push(new Store('Dubai', 11, 38, 3.7));
+storesObjects.push(new Store('Paris', 20, 38, 2.3));
+storesObjects.push(new Store('Lima', 2, 16, 4.6));
 createFooterRow();
