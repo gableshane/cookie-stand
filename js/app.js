@@ -10,9 +10,9 @@ form.addEventListener('submit', submitHandler)
 function submitHandler(event) {
     event.preventDefault();
     var storeName = event.target.storeCity.value;
-    var minCustomers = event.target.storeMinCustomers.value;
-    var maxCustomers = event.target.storeMaxCustomers.value;
-    var averageCustomers = event.target.storeAverageSale.value;
+    var minCustomers = parseInt(event.target.storeMinCustomers.value);
+    var maxCustomers = parseInt(event.target.storeMaxCustomers.value);
+    var averageCustomers = parseInt(event.target.storeAverageSale.value);
     
     storesObjects.push(new Store(storeName, minCustomers, maxCustomers, averageCustomers));
     updateFooterRow();
@@ -77,6 +77,7 @@ function randomInRange(min, max) {
 }
 // Constructor function
 function Store(storeName, minCustomers, maxCustomers, averageCustomers) {
+    console.log(storeName, minCustomers, maxCustomers, averageCustomers)
     this.storeName = storeName;
     this.minCustomers = minCustomers;
     this.maxCustomers = maxCustomers;
